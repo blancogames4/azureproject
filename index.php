@@ -6,14 +6,19 @@
 <body>
 	<h1>MySQL Table Viewer</h1>
 	<?php
+		ini_set('display_errors', 1);
+		error_reporting(E_ALL);
 		// Define database connection variables
 		$servername = "pg-server-sql.mysql.database.azure.com";
 		$username = "admin1";
 		$password = "GG#238Lanco";
 		$dbname = "pg-db-1";
 
-		// Create database connection
-		$conn = new mysqli($servername, $username, $password, $dbname);
+		$ssl_ca = "/site/wwwroot/BaltimoreCyberTrustRoot.crt.pem";
+		// Create connection with SSL
+		$conn = mysqli_init();
+		mysqli_ssl_set($conn, NULL, NULL, $ssl_ca, NULL, NULL);
+		mysqli_real_connect($conn, $servername, $username, $password, $dbname, 3306, NULL, MYSQLI_CLIENT_SSL);
 
 		// Check connection
 		if ($conn->connect_error) {
