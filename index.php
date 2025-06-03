@@ -14,7 +14,8 @@
 		$password = "GG#238Lanco";
 		$dbname = "pg-db-1";
 
-		$ssl_ca = "/site/wwwroot/BaltimoreCyberTrustRoot.crt.pem";
+		$ssl_ca = __DIR__ . "/BaltimoreCyberTrustRoot.crt.pem";
+
 		// Create connection with SSL
 		$conn = mysqli_init();
 		mysqli_ssl_set($conn, NULL, NULL, $ssl_ca, NULL, NULL);
