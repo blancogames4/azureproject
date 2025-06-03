@@ -8,42 +8,52 @@
 	<?php
 		ini_set('display_errors', 1);
 		error_reporting(E_ALL);
-		// Define database connection variables
-		$servername = "pg-server-sql.mysql.database.azure.com";
-		$username = "admin1";
-		$password = "GG#238Lanco";
-		$dbname = "pg-db-1";
 
-		$ssl_ca = __DIR__ . "/BaltimoreCyberTrustRoot.crt.pem";
+		// Only show content if the path is / or /employees or /employees/
+		$requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+		if ($requestUri === '/' || $requestUri === '/employees' || $requestUri === '/employees/') {
 
-		// Create connection with SSL
-		$conn = mysqli_init();
-		mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL); // Don't pass $ssl_ca
-		mysqli_real_connect($conn, $servername, $username, $password, $dbname, 3306, NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL);
+			// Define database connection variables
+			$servername = "pg-server-sql.mysql.database.azure.com";
+			$username = "admin1";
+			$password = "GG#238Lanco";
+			$dbname = "pg-db-1";
 
-		// Check connection
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
+			$ssl_ca = __DIR__ . "/BaltimoreCyberTrustRoot.crt.pem";
 
-		// Query database for all rows in the table
-		$sql = "SELECT * FROM employees";
-		$result = $conn->query($sql);
+			// Create connection with SSL
+			$conn = mysqli_init();
+			mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL); // Don't pass $ssl_ca
+			mysqli_real_connect($conn, $servername, $username, $password, $dbname, 3306, NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL);
 
-		if ($result->num_rows > 0) {
-			// Display table headers
-			echo "<table><tr><th>ID</th><th>Name</th><th>Email</th></tr>";
-			// Loop through results and display each row in the table
-			while($row = $result->fetch_assoc()) {
-				echo "<tr><td>" . $row["emp_no"] . "</td><td>" . $row["first_name"] . "</td><td>" . $row["email_id"] . "</td></tr>";
+			// Check connection
+			if ($conn->connect_error) {
+				die("Connection failed: " . $conn->connect_error);
 			}
-			echo "</table>";
-		} else {
-			echo "0 results";
-		}
 
-		// Close database connection
-		$conn->close();
+			// Query database for all rows in the table
+			$sql = "SELECT * FROM employees";
+			$result = $conn->query($sql);
+
+			if ($result->num_rows > 0) {
+				// Display table headers
+				echo "<table><tr><th>ID</th><th>Name</th><th>Email</th></tr>";
+				// Loop through results and display each row in the table
+				while($row = $result->fetch_assoc()) {
+					echo "<tr><td>" . $row["emp_no"] . "</td><td>" . $row["first_name"] . "</td><td>" . $row["email_id"] . "</td></tr>";
+				}
+				echo "</table>";
+			} else {
+				echo "0 results";
+			}
+
+			// Close database connection
+			$conn->close();
+		} else {
+			// Optional: Handle 404 or unsupported routes
+			http_response_code(404);
+			echo "<p>Page not found.</p>";
+		}
 	?>
 </body>
 </html>
