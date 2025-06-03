@@ -18,8 +18,8 @@
 
 		// Create connection with SSL
 		$conn = mysqli_init();
-		mysqli_ssl_set($conn, NULL, NULL, $ssl_ca, NULL, NULL);
-		mysqli_real_connect($conn, $servername, $username, $password, $dbname, 3306, NULL, MYSQLI_CLIENT_SSL);
+		mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL); // Don't pass $ssl_ca
+		mysqli_real_connect($conn, $servername, $username, $password, $dbname, 3306, NULL, MYSQLI_CLIENT_SSL_DONT_VERIFY_SERVER_CERT | MYSQLI_CLIENT_SSL);
 
 		// Check connection
 		if ($conn->connect_error) {
