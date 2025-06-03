@@ -33,6 +33,7 @@
 		if ($result->num_rows > 0) {
 			// Display table headers
 			echo "<table><tr><th>ID</th><th>Name</th><th>Email</th></tr>";
+			print_r($row);
 			// Loop through results and display each row in the table
 			while($row = $result->fetch_assoc()) {
 				echo "<tr><td>" . $row["id"] . "</td><td>" . $row["name"] . "</td><td>" . $row["email"] . "</td></tr>";
